@@ -11,19 +11,22 @@ var connection = mysql.createConnection({
 	database: 'bamazonDB',
 });
 
-connection.connect(function(err) {
-	if (err) {
-		return console.log(err);
-	}
+connection.connect(function (err) {
+  if (err) {
+    return console.log(err)
+  }
+  listItems()
+})
 
-connection.query('SELECT * FROM products WHERE department_name=?',
-   ["Grocery"],
- function(err, res) {
-	if (err) {
-		return console.log(err);
-	}
-console.log(res);
+function listItems () {
+  console.log("Items for Sale")
+  console.log('------------------')
+  connection.query('SELECT * FROM products', function (err, res) {
+    for (var i = 0; i < res.length; i++) {
+      console.log(res[i].item_id + ' | ' + res[i].product_name + ' | ' + res[i].department_name + ' | ' + res[i].price + ' | ' + res[i].stock_quantity)
+      console.log('------------------')
+    }
+    connection.end();
+  });
+};
 
-connection.end()
-});
-});
